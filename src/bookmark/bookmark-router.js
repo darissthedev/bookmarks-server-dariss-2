@@ -3,7 +3,7 @@ const { v4: uuid } = require('uuid');
 const logger = require('../logger');
 const bookmarks = require('../bookmarkStore');
 const { router } = require('../app');
-const BookmarksService = require('./bookmarks-service');
+// const bookmarks = require('./bookmarks-service');
 
 const bookmarkRouter = express.Router();
 const bodyParser = express.json();
@@ -20,7 +20,7 @@ bookmarkRouter
   .route('/bookmarks')
   .get((req, res, next) => {
     const knexInstance = req.app.get('db');
-    BookmarksService.getAllBookmarks(knexInstance)
+    bookmarks.getAllBookmarks(knexInstance)
       .then(bookmarks => {
         res.json(bookmarks.map(serializeBookmark));
       })
@@ -66,7 +66,7 @@ bookmarkRouter
   .route('/bookmarks/:bookmark_id')
   .get((req, res, next) => {
     const { bookmark_id } = req.params;
-    BookmarksService.getById(req.app.get('db'), bookmark_id)
+    bookmarks.getById(req.app.get('db'), bookmark_id)
       .then(bookmark => {
         if (!bookmark) {
           logger.error(`Bookmark with id ${bookmark_id} not found.`);
